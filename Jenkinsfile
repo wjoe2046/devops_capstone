@@ -23,10 +23,10 @@ pipeline {
                 sh "chmod +x changeTag.sh"
                 sh "./changeTag.sh ${DOCKER_TAG}"
                 sshagent(['kops-machine']) {
-                    sh "scp -o StrictHostKeyChecking=no k8s-services.yml k8s-deployment-tagged ubuntu@34.222.35.64:/home/ubuntu"
+                    sh "scp -o StrictHostKeyChecking=no k8s-services.yml k8s-deployment-tagged.yml ubuntu@34.222.35.64:/home/ubuntu"
                     script{
                         try{
-                            sh "ssh ubuntu@34.222.35.64 kubectl apply -f k8s-deployment-tagged"
+                            sh "ssh ubuntu@34.222.35.64 kubectl apply -f k8s-deployment-tagged.yml"
                             sh "ssh ubuntu@34.222.35.64 kubectl apply -f k8s-services.yml"
                             sh "ssh ubuntu@34.222.35.64 docker run -d -p 8080:8080 --name=nodeapp wjoe2046/nodeapp:${DOCKER_TAG}"	
                         } catch(error){

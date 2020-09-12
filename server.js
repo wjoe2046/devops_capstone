@@ -9,9 +9,7 @@ const HOST = '0.0.0.0';
 // App
 const app = express();
 app.get('/', (req, res) => {
-  res.send(
-    '<h1 style="color:red;">Final Udacity Capstone Project, Wenfei: Cloud DevOps!!</h1> \n'
-  );
+  res.send('index.html');
 });
 
 app.listen(PORT, HOST);

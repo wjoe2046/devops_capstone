@@ -4,11 +4,6 @@ pipeline {
         DOCKER_TAG = getDockerTag()
     }
     stages{
-        stage('Lint files'){
-            steps{
-                sh "tidy -q -e **/*.html"
-            }
-        }
 
         stage('Build docker image'){
             steps{

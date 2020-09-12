@@ -34,7 +34,6 @@ pipeline {
                         try{
                             sh "ssh ubuntu@34.222.35.64 kubectl apply -f k8s-deployment-tagged.yml"
                             sh "ssh ubuntu@34.222.35.64 kubectl apply -f k8s-services.yml"
-                            sh "ssh ubuntu@34.222.35.64 docker run -d -p 8080:8080 --name=nodeapp wjoe2046/nodeapp:${DOCKER_TAG}"	
                         } catch(error){
                             sh "ssh ubuntu@34.222.35.64 kubectl create -f . "
                             

@@ -2,6 +2,10 @@
 
 This project deploys a simple Node.js + Express application on an AWS Kubernetes cluster, via an integrated CICD pipeline using Jenkins.
 
+You may acccess the live project here:
+
+http://ec2-34-222-35-64.us-west-2.compute.amazonaws.com:8080/
+
 ## Project Files
 
 - **Application files**

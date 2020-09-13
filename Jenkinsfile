@@ -7,6 +7,7 @@ pipeline {
         stage('Lint') {
             steps {
                 sh "tidy -q -e index.html"
+                sh '''docker run --rm -i hadolint/hadolint < Dockerfile'''
             }
         }
 
@@ -32,9 +33,9 @@ pipeline {
                     sh "scp -o StrictHostKeyChecking=no k8s-services.yml k8s-deployment-tagged.yml ubuntu@34.222.35.64:/home/ubuntu"
                     script{
                         try{
+                            sh "ssh ubuntu@34.222.35.64 docker run -d -p 8080:80 --name=nodeapp wjoe2046/nodeapp:${DOCKER_TAG}"
                             sh "ssh ubuntu@34.222.35.64 kubectl apply -f k8s-deployment-tagged.yml"
                             sh "ssh ubuntu@34.222.35.64 kubectl apply -f k8s-services.yml"
-                            sh "ssh ubuntu@34.222.35.64 docker run -d -p 8080:3000 --name=nodeapp wjoe2046/nodeapp:${DOCKER_TAG}"
                         } catch(error){
                             sh "ssh ubuntu@34.222.35.64 kubectl create -f . "
                             

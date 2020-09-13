@@ -7,6 +7,7 @@ pipeline {
         stage('Lint') {
             steps {
                 sh "tidy -q -e index.html"
+                sh '''docker run --rm -i hadolint/hadolint < Dockerfile'''
             }
         }
 
@@ -34,10 +35,10 @@ pipeline {
                         try{
                             sh "ssh ubuntu@34.222.35.64 kubectl apply -f k8s-deployment-tagged.yml"
                             sh "ssh ubuntu@34.222.35.64 kubectl apply -f k8s-services.yml"
-                            sh returnStatus: true, script: "ssh ubuntu@34.222.35.64 docker rm -f nodeapp"
                             sh "ubuntu@34.222.35.64 docker run -d -p 8080:8080 --name=nodeapp wjoe2046/nodeapp:${DOCKER_TAG}"	
                         } catch(error){
-                            sh "ssh ubuntu@34.222.35.64 kubectl create -f . "
+                            sh returnStatus: true, script: "ssh ubuntu@34.222.35.64 rm -f nodeapp"
+                            sh returnStatus: true, script: 'ssh ubuntu@34.222.35.64 docker rmi $(docker images | grep wjoe2046/nodeapp | awk \'{print $3}\')'
                         }
                     }
                 }
